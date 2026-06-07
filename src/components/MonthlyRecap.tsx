@@ -230,9 +230,9 @@ export default function MonthlyRecap({
       if (inv.estado === 'Anulada') return;
       if (inv.tipo === 'ENTRADA') {
         totalEntradas += inv.total_factura;
-      } else {
-        totalSalidas += inv.total_factura;
       }
+      // SALIDA = informational only (already covered by SERAMAR booking imports)
+      // Do NOT add to totalSalidas — only show IVA for fiscal reference
     });
 
     return {
