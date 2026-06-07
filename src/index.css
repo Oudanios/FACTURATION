@@ -1,1 +1,120 @@
 @import "tailwindcss";
+
+/* ═══════════════════════════════════════════════════════════
+   PRINT STYLES — A4 Professional Reports
+   ═══════════════════════════════════════════════════════════ */
+@media print {
+  /* Hide all UI chrome */
+  header, nav, footer, button, .no-print,
+  [class*="sticky"], [class*="fixed"], [class*="shadow"],
+  input, select, textarea, .print\:hidden {
+    display: none !important;
+  }
+
+  /* Page setup */
+  @page {
+    size: A4;
+    margin: 15mm;
+  }
+
+  body {
+    background: white !important;
+    color: black !important;
+    font-size: 11pt;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+  }
+
+  /* Show print-only elements */
+  .print-only { display: block !important; }
+
+  /* Table formatting */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 9pt;
+    page-break-inside: avoid;
+  }
+  th {
+    background: #f1f5f9 !important;
+    color: #1e293b !important;
+    font-weight: 700;
+    font-size: 8pt;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 6px 8px;
+    border: 1px solid #cbd5e1;
+    text-align: left;
+  }
+  td {
+    padding: 4px 8px;
+    border: 1px solid #e2e8f0;
+    font-size: 8.5pt;
+  }
+  tr:nth-child(even) td {
+    background: #f8fafc !important;
+  }
+
+  /* Card borders */
+  .bg-white, [class*="bg-white"] {
+    border: 1px solid #e2e8f0 !important;
+  }
+
+  /* Print brand header */
+  .print-header {
+    text-align: left;
+    padding-bottom: 12px;
+    margin-bottom: 16px;
+    border-bottom: 2px solid #1e293b;
+  }
+  .print-header h1 {
+    font-size: 16pt;
+    font-weight: 800;
+    margin: 0 0 4px 0;
+    color: #0f172a;
+  }
+  .print-header p {
+    font-size: 8pt;
+    color: #475569;
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  .print-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 7pt;
+    color: #94a3b8;
+    padding: 8px;
+    border-top: 1px solid #e2e8f0;
+  }
+
+  /* Compact cards */
+  .print-card {
+    border: 1px solid #e2e8f0;
+    padding: 12px;
+    margin-bottom: 12px;
+    page-break-inside: avoid;
+  }
+
+  /* Totals row */
+  .print-total {
+    font-weight: 800;
+    font-size: 10pt;
+    border-top: 2px solid #1e293b;
+  }
+  .print-section-title {
+    font-size: 11pt;
+    font-weight: 700;
+    margin: 16px 0 8px 0;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #cbd5e1;
+    color: #1e293b;
+  }
+
+  /* Hide screen-only elements */
+  .screen-only { display: none !important; }
+}
+
