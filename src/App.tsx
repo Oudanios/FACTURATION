@@ -98,7 +98,63 @@ export default function App() {
   // Time Tracker
   const [timeStr, setTimeStr] = useState('');
 
-  // Synchronize localStorage
+  // ── API Sync token (stored in memory) ──────────────────────────
+  const [apiToken, setApiToken] = useState<string | null>(null);
+
+  // ── On login, try to sync with backend API ─────────────────────
+  useEffect(() => {
+    if (!currentUser) return;
+    const syncWithBackend = async () => {
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username: currentUser.username, password: currentUser.password || '' }),
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setApiToken(data.token);
+          // Fetch all data from backend
+          const [invRes, fundRes, costRes] = await Promise.all([
+            fetch('/api/invoices', { headers: { 'x-auth-token': data.token } }),
+            fetch('/api/funds', { headers: { 'x-auth-token': data.token } }),
+            fetch('/api/costs', { headers: { 'x-auth-token': data.token } }),
+          ]);
+          if (invRes.ok) { const d = await invRes.json(); if (d.length > 0) setInvoices(d); }
+          if (fundRes.ok) { const d = await fundRes.json(); if (d.length > 0) setFunds(d); }
+          if (costRes.ok) { const d = await costRes.json(); if (Object.keys(d).length > 0) setDetailedCosts(d); }
+        }
+      } catch {}
+    };
+    syncWithBackend();
+  }, [currentUser]);
+
+  // ── Save to API when data changes ──────────────────────────────
+  useEffect(() => {
+    if (!apiToken) return;
+    fetch('/api/invoices', {
+      method: 'PUT', headers: { 'Content-Type': 'application/json', 'x-auth-token': apiToken },
+      body: JSON.stringify(invoices),
+    }).catch(() => {});
+  }, [invoices, apiToken]);
+
+  useEffect(() => {
+    if (!apiToken) return;
+    fetch('/api/funds', {
+      method: 'PUT', headers: { 'Content-Type': 'application/json', 'x-auth-token': apiToken },
+      body: JSON.stringify(funds),
+    }).catch(() => {});
+  }, [funds, apiToken]);
+
+  useEffect(() => {
+    if (!apiToken) return;
+    fetch('/api/costs', {
+      method: 'PUT', headers: { 'Content-Type': 'application/json', 'x-auth-token': apiToken },
+      body: JSON.stringify(detailedCosts),
+    }).catch(() => {});
+  }, [detailedCosts, apiToken]);
+
+  // ── Synchronize localStorage (local cache) ─────────────────────
   useEffect(() => {
     localStorage.setItem('hotel_invoices_registry', JSON.stringify(invoices));
   }, [invoices]);
