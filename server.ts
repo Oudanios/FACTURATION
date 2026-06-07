@@ -1,7 +1,7 @@
 import express from 'express';
 import path from 'path';
 import crypto from 'crypto';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import mongoose, { Schema, model, Connection } from 'mongoose';
 import { fileURLToPath } from 'url';
 
