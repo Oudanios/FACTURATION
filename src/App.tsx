@@ -272,7 +272,7 @@ export default function App() {
     setImportingSeramar(true);
     setImportSeramarStatus(null);
     try {
-      const res = await fetch('/api/import/seramar-bookings');
+      const res = await fetch('https://serramaradmin.site/api/public/bookings?type=cash,tpv');
       if (!res.ok) {
         const err = await res.json().catch(() => ({ error: 'Error de servidor' }));
         setImportSeramarStatus(`Error: ${err.error || res.statusText}`);
