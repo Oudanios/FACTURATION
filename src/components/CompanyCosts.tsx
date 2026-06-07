@@ -520,7 +520,18 @@ export default function CompanyCosts({
   };
 
   const handlePrintCostsReport = () => {
-    window.print();
+    const hi = { company: 'SUN SERRAMAR SL', cif: 'B21902432', address: 'CALLE LAS FLORES, 5, 29631 BENALMADINA, MALAGA', email: 'SERRAMAR2906@GMAIL.COM', tel: '+34 652442604' };
+    const today = new Date().toLocaleDateString('es-ES');
+    const monthLabel = availableMonths.find(m => m.value === selectedMonth)?.label || selectedMonth;
+    const emps = currentMonthlyData.employees || [];
+    const ovs = currentMonthlyData.overheads || [];
+    const empRows = emps.map(e => `<tr><td>${e.name}</td><td>${e.role}</td><td class="num">${e.netSalary.toFixed(2)} €</td><td class="num">${e.socialSecurity.toFixed(2)} €</td><td class="num"><strong>${(e.netSalary + e.socialSecurity).toFixed(2)} €</strong></td></tr>`).join('');
+    const ovRows = ovs.map(o => `<tr><td>${o.category}</td><td>${o.label}</td><td>${o.date||''}</td><td class="num">${o.amount.toFixed(2)} €</td></tr>`).join('');
+    const w = window.open('', '_blank', 'width=900,height=700');
+    if (!w) return;
+    w.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Costes - '+monthLabel+'</title><style>body{font-family:Segoe UI,Arial,sans-serif;font-size:10pt;color:#1e293b;padding:30px 40px;max-width:210mm;margin:0 auto}h1{font-size:16pt;border-bottom:2px solid #1e293b;padding-bottom:6px;margin-bottom:4px}.meta{font-size:7pt;color:#64748b;margin-bottom:16px}h2{font-size:11pt;margin:16px 0 8px;padding-bottom:4px;border-bottom:1px solid #cbd5e1}table{width:100%;border-collapse:collapse;font-size:8.5pt;margin-bottom:12px}th{background:#f1f5f9;padding:5px 6px;border:1px solid #cbd5e1;text-align:left;font-size:7.5pt;text-transform:uppercase}td{padding:4px 6px;border:1px solid #e2e8f0}.num{text-align:right;font-family:Consolas,monospace}.total td{font-weight:800;font-size:9pt;border-top:2px solid #1e293b;background:#f8fafc}.footer{margin-top:20px;font-size:7pt;color:#94a3b8;text-align:center;border-top:1px solid #e2e8f0;padding-top:8px}@media print{body{padding:0}}</style></head><body><h1>COSTES DE EXPLOTACION</h1><div class="meta"><strong>'+hi.company+'</strong> | CIF: '+hi.cif+' | '+hi.address+' | Periodo: '+monthLabel+' | Generado: '+today+'</div><h2>1. PERSONAL</h2><table><thead><tr><th>Empleado</th><th>Cargo</th><th class="num">Sueldo Neto</th><th class="num">Seg. Social</th><th class="num">Total Coste</th></tr></thead><tbody>'+empRows+'</tbody><tfoot><tr class="total"><td colspan="4"><strong>TOTAL PERSONAL</strong></td><td class="num"><strong>'+personnelTotals.total.toFixed(2)+' €</strong></td></tr></tfoot></table><h2>2. SUMINISTROS Y GASTOS</h2><table><thead><tr><th>Categoria</th><th>Concepto</th><th>Fecha</th><th class="num">Monto</th></tr></thead><tbody>'+ovRows+'</tbody><tfoot><tr class="total"><td colspan="3"><strong>TOTAL SUMINISTROS</strong></td><td class="num"><strong>'+overheadTotals.total.toFixed(2)+' €</strong></td></tr></tfoot></table><h2>3. RESUMEN</h2><table><tr><td>Coste Personal</td><td class="num">'+personnelTotals.total.toFixed(2)+' €</td></tr><tr><td>Suministros</td><td class="num">'+overheadTotals.total.toFixed(2)+' €</td></tr><tr><td>Autonomos</td><td class="num">'+(currentMonthlyData.autonomosOtros||0).toFixed(2)+' €</td></tr>' + ((currentMonthlyData.customCosts||[]).map((c:any) => '<tr><td>'+c.label+'</td><td class="num">'+c.amount.toFixed(2)+' €</td></tr>').join('')) + '<tr class="total"><td><strong>TOTAL GASTOS</strong></td><td class="num"><strong>'+calculatedGrandTotal.toFixed(2)+' €</strong></td></tr></table><div class="footer">'+hi.company+' | '+hi.cif+' | '+hi.address+' | Documento generado: '+today+'</div></body></html>');
+    w.document.close();
+    setTimeout(() => w.print(), 400);
   };
 
   return (

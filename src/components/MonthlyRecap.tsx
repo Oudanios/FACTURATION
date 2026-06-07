@@ -1529,7 +1529,16 @@ export default function MonthlyRecap({
             <div className="p-4 px-6 border-t border-slate-200 bg-slate-50 flex justify-between items-center">
               <button
                 type="button"
-                onClick={() => window.print()}
+                onClick={() => {
+                  const f = consultingFund;
+                  if (!f) return;
+                  const w3 = window.open('', '_blank', 'width=800,height=600');
+                  if (!w3) return;
+                  const hi = { company: 'SUN SERRAMAR SL', cif: 'B21902432', address: 'CALLE LAS FLORES, 5, 29631 BENALMADINA, MALAGA', email: 'SERRAMAR2906@GMAIL.COM', tel: '+34 652442604' };
+                  w3.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Recibo '+f.id+'</title><style>body{font-family:Segoe UI,Arial,sans-serif;font-size:10pt;color:#1e293b;padding:30px 40px;max-width:210mm;margin:0 auto}h1{font-size:16pt;border-bottom:2px solid #1e293b;padding-bottom:6px;margin-bottom:4px}.meta{font-size:7pt;color:#64748b;margin-bottom:16px}table{width:100%;border-collapse:collapse;margin:12px 0;font-size:9pt}td{padding:5px 10px;border:1px solid #e2e8f0}.label{background:#f8fafc;font-weight:600;width:40%}.amount{font-size:14pt;font-weight:800;text-align:center;padding:15px;background:#f8fafc;margin:12px 0}.footer{margin-top:25px;font-size:7pt;color:#94a3b8;text-align:center;border-top:1px solid #e2e8f0;padding-top:8px}@media print{body{padding:0}}</style></head><body><h1>COMPROBANTE DE COBRO</h1><div class="meta"><strong>'+hi.company+'</strong> | CIF: '+hi.cif+' | '+hi.address+'</div><table><tr><td class="label">Referencia</td><td><strong>'+f.id+'</strong></td></tr><tr><td class="label">Fecha</td><td>'+f.fecha+'</td></tr><tr><td class="label">Hora</td><td>'+(f.hora_transferencia||'-')+'</td></tr><tr><td class="label">Metodo de Pago</td><td>'+f.metodo_pago+'</td></tr>'+(f.referencia_banco?('<tr><td class="label">Ref. Banco</td><td>'+f.referencia_banco+'</td></tr>'):'')+'<tr><td class="label">Concepto</td><td>'+f.concepto+'</td></tr></table><div class="amount">'+f.monto.toLocaleString("es-ES",{minimumFractionDigits:2})+' EUR</div><div class="footer">'+hi.company+' | '+hi.cif+' | '+hi.address+' | Registrado por: '+f.usuario+' | Periodo: '+f.mes_referencia+'</div></body></html>');
+                  w3.document.close();
+                  setTimeout(() => w3.print(), 400);
+                }}
                 className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-bold shadow-sm transition-all flex items-center gap-1 cursor-pointer font-semibold border border-slate-200"
               >
                 <Printer className="w-3.5 h-3.5 text-slate-500" />
