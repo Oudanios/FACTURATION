@@ -355,7 +355,110 @@ export default function MonthlyRecap({
   const hasItemizedOverheads = !!(currentCostsForSelectedMonth.overheads && currentCostsForSelectedMonth.overheads.length > 0);
 
   const handlePrintReport = () => {
-    window.print();
+    const hostalInfo = {
+      name: 'HOSTAL SERRAMAR',
+      company: 'SUN SERRAMAR SL',
+      cif: 'B21902432',
+      address: 'CALLE LAS FLORES, 5, 29631 BENALMADINA, MALAGA',
+      email: 'SERRAMAR2906@GMAIL.COM',
+      tel: '+34 652442604'
+    };
+    const today = new Date().toLocaleDateString('es-ES');
+    const monthLabel = availableMonths.find(m => m.value === selectedMonth)?.label || selectedMonth;
+    
+    const w = window.open('', '_blank', 'width=900,height=700');
+    if (!w) return;
+    
+    w.document.write(`
+      <!DOCTYPE html>
+      <html><head><meta charset="UTF-8">
+      <title>Informe Mensual - ${monthLabel}</title>
+      <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; font-size: 11pt; color: #1e293b; padding: 40px 50px; max-width: 210mm; margin: 0 auto; }
+        h1 { font-size: 18pt; font-weight: 800; margin-bottom: 2px; }
+        h2 { font-size: 12pt; font-weight: 700; margin: 20px 0 10px; padding-bottom: 4px; border-bottom: 1px solid #cbd5e1; }
+        .brand { font-size: 8pt; color: #64748b; line-height: 1.4; margin-bottom: 8px; }
+        .brand strong { color: #1e293b; }
+        .meta { display: flex; justify-content: space-between; border-bottom: 2px solid #1e293b; padding-bottom: 10px; margin-bottom: 20px; }
+        .meta-left { text-align: left; }
+        .meta-right { text-align: right; font-size: 9pt; }
+        .meta-right span { display: block; }
+        table { width: 100%; border-collapse: collapse; font-size: 9pt; margin-bottom: 12px; page-break-inside: avoid; }
+        th { background: #f1f5f9; color: #1e293b; font-weight: 700; font-size: 8pt; text-transform: uppercase; padding: 6px 8px; border: 1px solid #cbd5e1; text-align: left; }
+        td { padding: 5px 8px; border: 1px solid #e2e8f0; font-size: 9pt; }
+        .num { text-align: right; font-family: 'Consolas', monospace; }
+        .total-row td { font-weight: 800; font-size: 10pt; border-top: 2px solid #1e293b; background: #f8fafc; }
+        .positive { color: #059669; }
+        .negative { color: #dc2626; }
+        .footer { margin-top: 30px; font-size: 8pt; color: #94a3b8; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 10px; }
+        .signature { margin-top: 60px; display: flex; justify-content: space-between; }
+        .sig-line { border-top: 1px solid #1e293b; width: 200px; margin-top: 40px; }
+        .sig-label { font-size: 8pt; color: #64748b; margin-top: 4px; }
+        @media print { body { padding: 0; } }
+      </style></head>
+      <body>
+        <div class="meta">
+          <div class="meta-left">
+            <h1>INFORME MENSUAL DE CAJA</h1>
+            <div class="brand">
+              <strong>${hostalInfo.company}</strong> | CIF: ${hostalInfo.cif}<br>
+              ${hostalInfo.address}<br>
+              ${hostalInfo.email} | ${hostalInfo.tel}
+            </div>
+          </div>
+          <div class="meta-right">
+            <span><strong>Periodo:</strong> ${monthLabel}</span>
+            <span><strong>Fecha:</strong> ${today}</span>
+            <span><strong>Ref:</strong> AUDIT-${selectedMonth}</span>
+          </div>
+        </div>
+
+        <h2>1. INGRESOS (INBOUND)</h2>
+        <table>
+          <tr><th>Concepto</th><th class="num">Importe (EUR)</th></tr>
+          <tr><td>Facturas Emitidas (Salidas)</td><td class="num">${traditionalStats.salidas.toLocaleString('es-ES', {minimumFractionDigits:2})} €</td></tr>
+          <tr><td>Reservas Manuales TPV</td><td class="num">${fundMetrics.tpv.toLocaleString('es-ES', {minimumFractionDigits:2})} €</td></tr>
+          <tr><td>Reservas Manuales Efectivo</td><td class="num">${fundMetrics.cash.toLocaleString('es-ES', {minimumFractionDigits:2})} €</td></tr>
+          <tr><td>Transferencias Bancarias</td><td class="num">${fundMetrics.transfer.toLocaleString('es-ES', {minimumFractionDigits:2})} €</td></tr>
+          <tr><td>Online / Booking.com</td><td class="num">${fundMetrics.online.toLocaleString('es-ES', {minimumFractionDigits:2})} €</td></tr>
+          <tr><td>Bizum / Otros</td><td class="num">${fundMetrics.other.toLocaleString('es-ES', {minimumFractionDigits:2})} €</td></tr>
+          <tr class="total-row"><td><strong>TOTAL INGRESOS</strong></td><td class="num"><strong>${consolidatedAudit.ingresosTotales.toLocaleString('es-ES', {minimumFractionDigits:2})} €</strong></td></tr>
+        </table>
+
+        <h2>2. GASTOS (OUTBOUND)</h2>
+        <table>
+          <tr><th>Concepto</th><th class="num">Importe (EUR)</th></tr>
+          <tr><td>Facturas de Proveedores (Entradas)</td><td class="num">${consolidatedAudit.gastosFacturas.toLocaleString('es-ES', {minimumFractionDigits:2})} €</td></tr>
+          <tr><td>Nóminas (Sueldos Netos)</td><td class="num">${(consolidatedAudit.gastosDetalle.empleadosSueldos || 0).toLocaleString('es-ES', {minimumFractionDigits:2})} €</td></tr>
+          <tr><td>Seguridad Social Empresa</td><td class="num">${(consolidatedAudit.gastosDetalle.seguridadSocialEmpresa || 0).toLocaleString('es-ES', {minimumFractionDigits:2})} €</td></tr>
+          <tr><td>Autónomos / Dirección</td><td class="num">${(consolidatedAudit.gastosDetalle.autonomosOtros || 0).toLocaleString('es-ES', {minimumFractionDigits:2})} €</td></tr>
+          <tr><td>Suministros (Luz, Agua, Internet)</td><td class="num">${(consolidatedAudit.gastosDetalle.suministrosDirectos || 0).toLocaleString('es-ES', {minimumFractionDigits:2})} €</td></tr>
+          <tr><td>Seguros Hotel</td><td class="num">${(consolidatedAudit.gastosDetalle.segurosHotel || 0).toLocaleString('es-ES', {minimumFractionDigits:2})} €</td></tr>
+          <tr><td>Tasas e Impuestos</td><td class="num">${(consolidatedAudit.gastosDetalle.tasasImpuestos || 0).toLocaleString('es-ES', {minimumFractionDigits:2})} €</td></tr>
+          <tr><td>Otros Costes</td><td class="num">${(consolidatedAudit.gastosDetalle.otrosCostes || 0).toLocaleString('es-ES', {minimumFractionDigits:2})} €</td></tr>
+          ${(consolidatedAudit.gastosDetalle.customCosts || []).map((c: any) => `<tr><td>↳ ${c.label}</td><td class="num">${c.amount.toLocaleString('es-ES', {minimumFractionDigits:2})} €</td></tr>`).join('')}
+          <tr class="total-row"><td><strong>TOTAL GASTOS</strong></td><td class="num"><strong>${consolidatedAudit.gastosTotales.toLocaleString('es-ES', {minimumFractionDigits:2})} €</strong></td></tr>
+        </table>
+
+        <h2>3. RESULTADO NETO</h2>
+        <table>
+          <tr><th>Concepto</th><th class="num">Importe (EUR)</th></tr>
+          <tr><td>Total Ingresos</td><td class="num positive">+ ${consolidatedAudit.ingresosTotales.toLocaleString('es-ES', {minimumFractionDigits:2})} €</td></tr>
+          <tr><td>Total Gastos</td><td class="num negative">- ${consolidatedAudit.gastosTotales.toLocaleString('es-ES', {minimumFractionDigits:2})} €</td></tr>
+          <tr class="total-row"><td><strong>BENEFICIO NETO</strong></td><td class="num"><strong class="${consolidatedAudit.balanceNeto >= 0 ? 'positive' : 'negative'}">${consolidatedAudit.balanceNeto.toLocaleString('es-ES', {minimumFractionDigits:2})} €</strong></td></tr>
+          <tr><td>Margen de Rentabilidad</td><td class="num"><strong>${consolidatedAudit.rentabilidadPorcentaje}%</strong></td></tr>
+        </table>
+
+        <div class="signature">
+          <div><div class="sig-line"></div><div class="sig-label">Firma del Director de Operaciones</div></div>
+          <div><div class="sig-line"></div><div class="sig-label">Firma del Administrador / Auditor</div></div>
+        </div>
+        <div class="footer">${hostalInfo.company} | ${hostalInfo.cif} | ${hostalInfo.address} | Generado: ${today} | Versión 1.0</div>
+      </body></html>
+    `);
+    w.document.close();
+    setTimeout(() => w.print(), 500);
   };
 
   const handleExportMonthlyRecapCSV = () => {

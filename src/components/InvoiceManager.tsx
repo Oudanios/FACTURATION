@@ -328,7 +328,20 @@ export default function InvoiceManager({
               </button>
 
               <button
-                onClick={() => window.print()}
+                onClick={() => {
+                  const w = window.open('', '_blank', 'width=900,height=700');
+                  if (!w) return;
+                  const hostalInfo = { company: 'SUN SERRAMAR SL', cif: 'B21902432', address: 'CALLE LAS FLORES, 5, 29631 BENALMADINA, MALAGA', email: 'SERRAMAR2906@GMAIL.COM', tel: '+34 652442604' };
+                  const today = new Date().toLocaleDateString('es-ES');
+                  const data = processedInvoices;
+                  const totalBase = data.reduce((s,i) => s + (i.estado !== 'Anulada' ? i.base_imponible : 0), 0);
+                  const totalIVA = data.reduce((s,i) => s + (i.estado !== 'Anulada' ? i.cuota_iva : 0), 0);
+                  const totalNeto = data.reduce((s,i) => s + (i.estado !== 'Anulada' ? i.total_factura : 0), 0);
+                  const rows = data.map(inv => `<tr><td>#${inv.n_origen}</td><td>${inv.fecha}</td><td><span class="${inv.tipo==='ENTRADA'?'badge-red':'badge-green'}">${inv.tipo}</span></td><td>${inv.n_factura}</td><td>${inv.empresa_cliente}</td><td>${inv.concepto}</td><td class="num">${inv.base_imponible.toFixed(2)}</td><td class="num">${inv.cuota_iva.toFixed(2)}</td><td class="num">${inv.retencion_irpf.toFixed(2)}</td><td class="num"><strong>${inv.total_factura.toFixed(2)}</strong></td><td>${inv.metodo_pago}</td><td>${inv.estado}</td></tr>`).join('');
+                  w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Registro de Facturas</title><style>body{font-family:'Segoe UI',Arial,sans-serif;font-size:9pt;color:#1e293b;padding:30px 40px;max-width:297mm;margin:0 auto}h1{font-size:14pt;border-bottom:2px solid #1e293b;padding-bottom:6px;margin-bottom:4px}.meta{font-size:7pt;color:#64748b;margin-bottom:16px}table{width:100%;border-collapse:collapse;font-size:7.5pt}th{background:#f1f5f9;padding:5px 6px;border:1px solid #cbd5e1;text-align:left;font-size:7pt;text-transform:uppercase}td{padding:4px 6px;border:1px solid #e2e8f0}.num{text-align:right;font-family:Consolas,monospace}.badge-red{background:#fee2e2;color:#b91c1c;padding:1px 5px;font-weight:700;font-size:7pt}.badge-green{background:#dcfce7;color:#15803d;padding:1px 5px;font-weight:700;font-size:7pt}.total-row td{font-weight:800;border-top:2px solid #1e293b;background:#f8fafc}.footer{margin-top:20px;font-size:7pt;color:#94a3b8;text-align:center;border-top:1px solid #e2e8f0;padding-top:8px}@media print{body{padding:0}}</style></head><body><h1>REGISTRO DE FACTURAS</h1><div class="meta"><strong>${hostalInfo.company}</strong> | CIF: ${hostalInfo.cif} | ${hostalInfo.address} | ${hostalInfo.email} | Generado: ${today}</div><table><thead><tr><th>Nº</th><th>Fecha</th><th>Tipo</th><th>Nº Factura</th><th>Empresa</th><th>Concepto</th><th class="num">Base</th><th class="num">IVA</th><th class="num">IRPF</th><th class="num">Total</th><th>Pago</th><th>Estado</th></tr></thead><tbody>${rows}</tbody><tfoot><tr class="total-row"><td colspan="6"><strong>TOTALES (${data.length} facturas)</strong></td><td class="num"><strong>${totalBase.toFixed(2)} €</strong></td><td class="num"><strong>${totalIVA.toFixed(2)} €</strong></td><td class="num"></td><td class="num"><strong>${totalNeto.toFixed(2)} €</strong></td><td colspan="2"></td></tr></tfoot></table><div class="footer">${hostalInfo.company} | ${hostalInfo.cif} | Documento generado: ${today}</div></body></html>`);
+                  w.document.close();
+                  setTimeout(() => w.print(), 400);
+                }}
                 className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer"
                 title="Imprimir listado filtrado"
               >
