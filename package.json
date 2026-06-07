@@ -8,9 +8,9 @@
     "build": "vite build",
     "preview": "vite preview",
     "server": "tsx server.ts",
-    "start": "node dist-server/server.js",
-    "build:server": "esbuild server.ts --platform=node --format=esm --bundle --outfile=dist-server/server.js --external=bcrypt --external=mongoose",
-    "build:all": "npm run build && mkdir -p dist-server && npm run build:server",
+    "start": "node server.js",
+    "build:server": "esbuild server.ts --platform=node --format=esm --bundle --outfile=server.js --external=bcrypt --external=mongoose",
+    "build:all": "npm run build && npm run build:server",
     "lint": "tsc --noEmit"
   },
   "dependencies": {
