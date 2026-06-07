@@ -1,0 +1,6 @@
+{
+  "name": "Hotel Invoice Tracker & Facturation System",
+  "description": "A comprehensive hotel facturation management platform to record incoming/outgoing invoices, generate client invoices, track profitability, and access analytics with user/admin role permission levels.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
