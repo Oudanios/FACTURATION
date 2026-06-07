@@ -87,17 +87,12 @@ export default function LoginScreen({ onLoginSuccess, lang, onLangChange }: Logi
 
   const selectPredefinedAccount = (acc: UserAccount) => {
     setUsername(acc.username);
-    setPassword(acc.password || '');
+    setPassword('');
     setErrorMsg('');
   };
 
   return (
     <div className="min-h-screen bg-slate-100 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 font-sans">
-      <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-md px-4 py-2 rounded-lg text-xs leading-5 border border-slate-200 shadow-sm max-w-sm">
-        <span className="font-semibold text-slate-800 block mb-1">{t.demoModeTitle}</span>
-        <p className="text-slate-600 leading-normal">{t.demoModeText}</p>
-      </div>
-
       <div className="sm:mx-auto w-full max-w-md">
         <div className="flex justify-center">
           <div className="p-3 bg-indigo-600 text-white rounded-2xl shadow-lg shadow-indigo-500/20">
@@ -210,23 +205,16 @@ export default function LoginScreen({ onLoginSuccess, lang, onLangChange }: Logi
               {t.authorizedTitle}
             </span>
 
-            <div className="grid grid-cols-2 gap-2.5">
-              {USER_ACCOUNTS.map((acc) => {
+            <div className="grid grid-cols-3 gap-2.5">
+              {USER_ACCOUNTS.filter(acc => ['ADMIN','MANAGER','VIEWER'].includes(acc.role)).map((acc) => {
                 const isSelected = username.toLowerCase() === acc.username.toLowerCase();
                 let roleColor = "";
-                let roleLabel = "";
                 if (acc.role === 'ADMIN') {
-                  roleColor = "bg-rose-50 text-rose-700 border border-rose-100 hover:bg-rose-100/50";
-                  roleLabel = "ADMIN";
+                  roleColor = "bg-rose-50 text-rose-700 border-rose-100";
                 } else if (acc.role === 'MANAGER') {
-                  roleColor = "bg-amber-50 text-amber-700 border border-amber-100 hover:bg-amber-100/50";
-                  roleLabel = "MGR";
-                } else if (acc.role === 'USER') {
-                  roleColor = "bg-teal-50 text-teal-700 border border-teal-100 hover:bg-teal-100/50";
-                  roleLabel = "USER";
+                  roleColor = "bg-amber-50 text-amber-700 border-amber-100";
                 } else {
-                  roleColor = "bg-slate-100 text-slate-700 border border-slate-200 hover:bg-slate-200/50";
-                  roleLabel = "VIEW";
+                  roleColor = "bg-slate-100 text-slate-600 border-slate-200";
                 }
 
                 return (
@@ -234,20 +222,18 @@ export default function LoginScreen({ onLoginSuccess, lang, onLangChange }: Logi
                     key={acc.username}
                     type="button"
                     onClick={() => selectPredefinedAccount(acc)}
-                    className={`text-left p-2.5 rounded-xl border text-xs transition-all flex flex-col justify-between cursor-pointer ${
+                    className={`text-center p-3 rounded-xl border text-xs transition-all flex flex-col items-center gap-1 cursor-pointer ${
                       isSelected
                         ? 'border-indigo-500 ring-2 ring-indigo-500/10 bg-indigo-50'
-                        : 'border-slate-200 bg-slate-50/50 hover:border-slate-300'
+                        : `border-slate-200 bg-white hover:border-slate-300 ${roleColor}`
                     }`}
                   >
-                    <div className="flex items-center justify-between w-full">
-                      <span className="font-bold text-slate-800 block truncate max-w-[80px]">{acc.name.split(' ')[0]}</span>
-                      <span className={`px-1.5 py-0.5 rounded text-[9px] font-extrabold tracking-wide border ${roleColor}`}>{roleLabel}</span>
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-black ${roleColor}`}>
+                      {acc.name.charAt(0)}
                     </div>
-                    <div className="mt-1 flex items-center text-[10px] text-slate-500 justify-between w-full">
-                      <span className="font-mono bg-white px-1 leading-normal rounded border border-slate-200/80">{acc.password}</span>
-                      {isSelected && <Check className="w-3.5 h-3.5 text-indigo-600 shrink-0 ml-1" />}
-                    </div>
+                    <span className="font-bold text-slate-800 text-[11px]">{acc.name.split(' ')[0]}</span>
+                    <span className="text-[9px] text-slate-400 font-medium">{acc.role === 'ADMIN' ? 'Administrador' : acc.role === 'MANAGER' ? 'Gerente' : 'Auditor'}</span>
+                    {isSelected && <Check className="w-3.5 h-3.5 text-indigo-600" />}
                   </button>
                 );
               })}
