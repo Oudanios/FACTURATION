@@ -1,7 +1,12 @@
 import express from 'express';
 import path from 'path';
 import crypto from 'crypto';
-import bcrypt from 'bcryptjs';
+import bcryptjs from 'bcryptjs';
+// bcryptjs v2.4+ returns Promises, but ensure compat:
+const bcrypt = {
+  hash: (s: string, rounds: number): Promise<string> => bcryptjs.hash(s, rounds),
+  compare: (s: string, hash: string): Promise<boolean> => bcryptjs.compare(s, hash),
+};
 import mongoose, { Schema, model, Connection } from 'mongoose';
 import { fileURLToPath } from 'url';
 
@@ -308,8 +313,8 @@ app.get('*', (_req, res) => {
 // ─── DB Connect & Listen ─────────────────────────────────────────────────────
 async function bootstrap() {
   try {
-    await mongoose.connect(MONGODB_URI);
-    console.log(`[facturation] MongoDB connected: ${MONGODB_URI.replace(/\/\/[^@]+@/, '//<credentials>@')}`);
+    await mongoose.connect(MONGODB_URI, { serverSelectionTimeoutMS: 10000 });
+    console.log('[facturation] MongoDB connected');
 
     // Seed default admin user if DB is empty
     const count = await UserM.countDocuments();
@@ -323,9 +328,15 @@ async function bootstrap() {
       console.log(`[facturation] Server running on port ${PORT}`);
     });
   } catch (err) {
-    console.error('[facturation] Failed to connect to MongoDB:', err);
-    process.exit(1);
+    console.error('[facturation] MongoDB connection failed, retrying...', err);
+    // Retry after 5 seconds instead of crashing
+    setTimeout(bootstrap, 5000);
   }
 }
+
+// Don't crash on unhandled promises
+process.on('unhandledRejection', (reason) => {
+  console.error('[facturation] Unhandled rejection:', reason);
+});
 
 bootstrap();
