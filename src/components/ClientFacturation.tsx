@@ -484,8 +484,7 @@ export default function ClientFacturation({
             {/* Logo and Hotel details */}
             <div className="flex justify-between items-start pb-6 border-b border-slate-200">
               <div>
-                <span className="text-[10px] font-bold tracking-widest text-indigo-600 uppercase">HOSPEDAJE CONFORT</span>
-                <h1 className="text-xl font-black text-slate-800 tracking-tight mt-0.5">Hostal Serramar</h1>
+                <h1 className="text-xl font-black text-slate-800 tracking-tight">Hostal Serramar</h1>
                 <p className="text-[9px] text-slate-500 leading-normal mt-1">
                   Empresa: <span className="font-semibold">{`SUN SERRAMAR SL`}</span><br />
                   CIF: {`B21902432`}<br />
