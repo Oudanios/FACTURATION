@@ -256,13 +256,7 @@ export default function AdminPanel({
           </p>
         </div>
 
-        <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 inline-block text-left text-xs space-y-2">
-          <span className="font-bold text-slate-700 block">🔒 Credenciales habilitadas de administración:</span>
-          <p className="font-mono text-slate-500">
-            Administrador Principal: <span className="text-indigo-600 font-bold">admin</span> / <span className="text-green-600 font-bold">OUDANI@RABI</span>
-          </p>
-          <p className="text-[10px] text-slate-400">{t.adminRestrictedTips}</p>
-        </div>
+        <p className="text-[10px] text-slate-400 mt-3">{t.adminRestrictedTips}</p>
       </div>
     );
   }
