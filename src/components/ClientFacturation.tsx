@@ -585,14 +585,13 @@ export default function ClientFacturation({
               </div>
             </div>
 
-            {/* Signatures & terms footer */}
-            <div className="pt-8 grid grid-cols-2 text-center text-[8px] text-slate-400 gap-8">
-              <div className="border-t border-dashed border-slate-200 pt-4">
+            {/* Signatures at the very bottom of the A4 page */}
+            <div className="mt-auto pt-12 grid grid-cols-2 text-center text-[8px] text-slate-400 gap-8">
+              <div className="border-t border-slate-300 pt-4">
                 <p className="font-bold text-slate-600 block mb-0.5">Firma Autorizada Hostal</p>
-                <p className="text-[7px]">Sello Hostal Serramar • SUN SERRAMAR SL</p>
+                <p className="text-[7px]">Sello Hostal Serramar · SUN SERRAMAR SL</p>
               </div>
-
-              <div className="border-t border-dashed border-slate-200 pt-4">
+              <div className="border-t border-slate-300 pt-4">
                 <p className="font-bold text-slate-600 block mb-0.5">Recibí & Conforme Cliente</p>
                 <p className="text-[7px]">Al pagar se aceptan términos de hospedaje</p>
               </div>
