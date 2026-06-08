@@ -1,24 +1,21 @@
 @import "tailwindcss";
 
 @media print {
-  /* Hide all UI chrome */
-  header, nav, footer, button, .no-print,
-  [class*="sticky"], [class*="fixed"], [class*="shadow"],
-  input, select, textarea {
-    display: none !important;
-  }
-  /* Show the invoice preview area full page */
+  /* Hide EVERYTHING except the invoice template */
+  body * { visibility: hidden; }
+  #printable-area, #printable-area * { visibility: visible; }
   #printable-area {
     position: absolute !important;
     top: 0 !important;
     left: 0 !important;
     width: 100% !important;
-    height: auto !important;
-    padding: 20px !important;
+    margin: 0 !important;
+    padding: 20px 30px !important;
     box-shadow: none !important;
     border: none !important;
+    border-radius: 0 !important;
+    background: white !important;
   }
-  body { background: white !important; }
-  @page { size: A4; margin: 10mm; }
+  @page { size: A4; margin: 0; }
 }
 
