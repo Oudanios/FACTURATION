@@ -541,7 +541,6 @@ export default function InvoiceManager({
                   <th className="px-4 py-3.5 font-bold text-right">Pre. IRPF</th>
                   <th className="px-4 py-3.5 font-bold text-right">Total Factura</th>
                   <th className="px-4 py-3.5 font-bold">Método / Estado</th>
-                  <th className="px-4 py-3.5 font-bold text-center">Usuario</th>
                   <th className="px-4 py-3.5 font-bold text-right">Acciones</th>
                 </tr>
               </thead>
@@ -646,13 +645,6 @@ export default function InvoiceManager({
                         }`}>
                           {inv.estado === 'Pagada' ? 'PAGADA' : 
                            inv.estado === 'Pendiente' ? 'PENDIENTE' : 'ANULADA'}
-                        </span>
-                      </td>
-
-                      {/* User who indexed */}
-                      <td className="px-4 py-3 text-center whitespace-nowrap text-slate-500 font-mono text-[10px]">
-                        <span className="bg-slate-50 rounded border border-slate-200 px-1 py-0.5 uppercase tracking-wide">
-                          {inv.usuario}
                         </span>
                       </td>
 
@@ -1217,13 +1209,7 @@ export default function InvoiceManager({
               </div>
 
               {/* Audit logs & creators */}
-              <div className="border-t border-slate-200 pt-4 flex justify-between items-center text-[10px] text-slate-400 bg-slate-50/70 -mx-6 -mb-6 p-4 px-6 border-b rounded-b-2xl">
-                <div>
-                  <span>{lang === 'es' ? 'Registrado por:' : lang === 'fr' ? 'Enregistré par :' : 'Keyed-by:'} </span>
-                  <span className="font-mono bg-indigo-50 px-1 py-0.2 rounded border border-indigo-200">
-                    {consultingInvoice.usuario}
-                  </span>
-                </div>
+              <div className="border-t border-slate-200 pt-4 flex justify-end items-center text-[10px] text-slate-400 bg-slate-50/70 -mx-6 -mb-6 p-4 px-6 border-b rounded-b-2xl">
                 <div className="flex gap-2">
                   <span className="font-semibold">Nº Doc: <span className="font-mono bg-white px-1.5 py-0.5 leading-none rounded select-all font-bold text-slate-600 border border-slate-200">{consultingInvoice.n_factura}</span></span>
                 </div>
@@ -1238,7 +1224,7 @@ export default function InvoiceManager({
                 onClick={() => {
                   const inv = consultingInvoice;
                   const hi = { company: 'SUN SERRAMAR SL', cif: 'B21902432', address: 'CALLE LAS FLORES, 5, 29631 BENALMADINA, MALAGA', email: 'SERRAMAR2906@GMAIL.COM', tel: '+34 652442604' };
-                  const html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Factura '+inv.n_factura+'</title><style>body{font-family:Segoe UI,Arial,sans-serif;font-size:10pt;color:#1e293b;padding:30px 40px;max-width:210mm;margin:0 auto}h1{font-size:16pt;margin:0}.header{display:flex;justify-content:space-between;border-bottom:2px solid #1e293b;padding-bottom:10px;margin-bottom:20px}.header-r{text-align:right;font-size:8pt}.company{font-size:7pt;color:#64748b}table{width:100%;border-collapse:collapse;margin:12px 0;font-size:9pt}.t2 td,.t2 th{padding:6px 10px;border:1px solid #cbd5e1}.t2 th{background:#f1f5f9;font-size:8pt;text-transform:uppercase}.num{text-align:right;font-family:Consolas,monospace}.total td{font-weight:800;font-size:10pt;border-top:2px solid #1e293b;background:#f8fafc}.signature{margin-top:40px;display:flex;justify-content:space-between}.sig-line{border-top:1px solid #1e293b;width:200px;margin-top:40px}.sig-label{font-size:7pt;color:#64748b;margin-top:4px}.footer{margin-top:20px;font-size:7pt;color:#94a3b8;text-align:center;border-top:1px solid #e2e8f0;padding-top:8px}@media print{body{padding:0}}</style></head><body><div class="header"><div><h1>FACTURA</h1><div class="company"><strong>'+hi.company+'</strong> | CIF: '+hi.cif+'<br>'+hi.address+'<br>'+hi.email+' | '+hi.tel+'</div></div><div class="header-r"><strong>Nº Factura:</strong> '+inv.n_factura+'<br><strong>Fecha:</strong> '+inv.fecha+'<br><strong>Registro:</strong> #'+inv.n_origen+'</div></div><table class="t2"><tr><th>Cliente</th><th>CIF/NIF</th><th>Método Pago</th><th>Estado</th></tr><tr><td><strong>'+inv.empresa_cliente+'</strong></td><td>'+inv.nif_cif+'</td><td>'+inv.metodo_pago+'</td><td>'+inv.estado+'</td></tr></table><table class="t2"><tr><th>Concepto</th><th>Categoría</th><th class="num">Base Imponible</th><th class="num">IVA ('+inv.porc_iva+'%)</th><th class="num">IRPF ('+inv.irpf_perc+'%)</th></tr><tr><td>'+inv.concepto+'</td><td>'+inv.categoria+'</td><td class="num">'+inv.base_imponible.toFixed(2)+' €</td><td class="num">'+inv.cuota_iva.toFixed(2)+' €</td><td class="num">-'+inv.retencion_irpf.toFixed(2)+' €</td></tr><tr class="total"><td colspan="4"><strong>TOTAL FACTURA</strong></td><td class="num"><strong>'+inv.total_factura.toFixed(2)+' €</strong></td></tr></table><div class="signature"><div><div class="sig-line"></div><div class="sig-label">Firma del Emisor</div></div><div><div class="sig-line"></div><div class="sig-label">Firma del Receptor</div></div></div><div class="footer">'+hi.company+' | '+hi.cif+' | '+hi.address+' | Registrado por: '+inv.usuario+'</div><script>window.onload=function(){setTimeout(function(){window.print();},200);}<\/script></body></html>';
+                  const html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Factura '+inv.n_factura+'</title><style>body{font-family:Segoe UI,Arial,sans-serif;font-size:10pt;color:#1e293b;padding:30px 40px;max-width:210mm;margin:0 auto}h1{font-size:16pt;margin:0}.header{display:flex;justify-content:space-between;border-bottom:2px solid #1e293b;padding-bottom:10px;margin-bottom:20px}.header-r{text-align:right;font-size:8pt}.company{font-size:7pt;color:#64748b}table{width:100%;border-collapse:collapse;margin:12px 0;font-size:9pt}.t2 td,.t2 th{padding:6px 10px;border:1px solid #cbd5e1}.t2 th{background:#f1f5f9;font-size:8pt;text-transform:uppercase}.num{text-align:right;font-family:Consolas,monospace}.total td{font-weight:800;font-size:10pt;border-top:2px solid #1e293b;background:#f8fafc}.signature{margin-top:40px;display:flex;justify-content:space-between}.sig-line{border-top:1px solid #1e293b;width:200px;margin-top:40px}.sig-label{font-size:7pt;color:#64748b;margin-top:4px}.footer{margin-top:20px;font-size:7pt;color:#94a3b8;text-align:center;border-top:1px solid #e2e8f0;padding-top:8px}@media print{body{padding:0}}</style></head><body><div class="header"><div><h1>FACTURA</h1><div class="company"><strong>'+hi.company+'</strong> | CIF: '+hi.cif+'<br>'+hi.address+'<br>'+hi.email+' | '+hi.tel+'</div></div><div class="header-r"><strong>Nº Factura:</strong> '+inv.n_factura+'<br><strong>Fecha:</strong> '+inv.fecha+'<br><strong>Registro:</strong> #'+inv.n_origen+'</div></div><table class="t2"><tr><th>Cliente</th><th>CIF/NIF</th><th>Método Pago</th><th>Estado</th></tr><tr><td><strong>'+inv.empresa_cliente+'</strong></td><td>'+inv.nif_cif+'</td><td>'+inv.metodo_pago+'</td><td>'+inv.estado+'</td></tr></table><table class="t2"><tr><th>Concepto</th><th>Categoría</th><th class="num">Base Imponible</th><th class="num">IVA ('+inv.porc_iva+'%)</th><th class="num">IRPF ('+inv.irpf_perc+'%)</th></tr><tr><td>'+inv.concepto+'</td><td>'+inv.categoria+'</td><td class="num">'+inv.base_imponible.toFixed(2)+' €</td><td class="num">'+inv.cuota_iva.toFixed(2)+' €</td><td class="num">-'+inv.retencion_irpf.toFixed(2)+' €</td></tr><tr class="total"><td colspan="4"><strong>TOTAL FACTURA</strong></td><td class="num"><strong>'+inv.total_factura.toFixed(2)+' €</strong></td></tr></table><div class="signature"><div><div class="sig-line"></div><div class="sig-label">Firma del Emisor</div></div><div><div class="sig-line"></div><div class="sig-label">Firma del Receptor</div></div></div><div class="footer">'+hi.company+' | '+hi.cif+' | '+hi.address+'</div><script>window.onload=function(){setTimeout(function(){window.print();},200);}<\/script></body></html>';
                   // Use data URI via anchor click — NEVER blocked by popup blockers
                   const a = document.createElement('a');
                   a.href = 'data:text/html;charset=utf-8,' + encodeURIComponent(html);
