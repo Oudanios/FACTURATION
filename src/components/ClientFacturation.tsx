@@ -535,7 +535,7 @@ export default function ClientFacturation({
                   <p className="text-slate-500 mt-1 block">Estado: <span className="text-emerald-600 font-extrabold">COBRADA (Pagada)</span></p>
                 </div>
                 
-                <p className="text-[9px] text-slate-400">Usuario Responsable: <span className="font-extrabold text-indigo-600">{currentUser.name.split(' ')[0]}</span></p>
+
               </div>
             </div>
 
