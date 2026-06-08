@@ -599,7 +599,7 @@ export default function ClientFacturation({
             </div>
 
             {/* Quick Helper print triggers */}
-            <div className="flex justify-center pt-8 border-t border-slate-100">
+            <div className="flex justify-center pt-8 border-t border-slate-100 no-print">
               <button
                 onClick={handlePrint}
                 className="px-3.5 py-1.5 bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 rounded-lg text-[10px] font-bold transition-all flex items-center gap-1 cursor-pointer"

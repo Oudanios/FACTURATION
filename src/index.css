@@ -1,7 +1,6 @@
 @import "tailwindcss";
 
 @media print {
-  /* Hide EVERYTHING except the invoice template */
   body * { visibility: hidden; }
   #printable-area, #printable-area * { visibility: visible; }
   #printable-area {
@@ -10,12 +9,14 @@
     left: 0 !important;
     width: 100% !important;
     margin: 0 !important;
-    padding: 20px 30px !important;
+    padding: 25px 35px !important;
     box-shadow: none !important;
     border: none !important;
     border-radius: 0 !important;
     background: white !important;
+    font-size: 10pt !important;
   }
+  .no-print { display: none !important; }
   @page { size: A4; margin: 0; }
 }
 
