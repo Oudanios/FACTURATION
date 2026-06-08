@@ -201,6 +201,7 @@ export default function ClientFacturation({
     a.target = '_blank';
     a.click();
     setTimeout(function() { URL.revokeObjectURL(url); }, 15000);
+  };
 
   return (
     <div className="space-y-6 font-sans">
