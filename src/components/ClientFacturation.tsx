@@ -475,8 +475,8 @@ export default function ClientFacturation({
 
         </div>
 
-        {/* RIGHT LIVE PREVIEW: High-fidelity A4 printable bill mockup */}
-        <div className="bg-white p-8 rounded-2xl border border-slate-200 shadow-lg relative overflow-hidden" id="printable-area">
+        {/* RIGHT LIVE PREVIEW: A4 paper mockup */}
+        <div className="bg-white p-10 rounded-2xl border border-slate-200 shadow-lg relative overflow-hidden max-w-[210mm] mx-auto" id="printable-area" style={{minHeight:'297mm'}}>
           <div className="absolute top-0 right-0 h-1.5 bg-indigo-600 inset-x-0" />
           
           {/* Invoice A4 mockup Layout */}

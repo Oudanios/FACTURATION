@@ -1,27 +1,10 @@
 @import "tailwindcss";
 
 @media print {
-  html, body { width: 100%; height: 100%; margin: 0; padding: 0; background: white !important; }
-  body > * { display: none !important; }
-  body > #root { display: block !important; }
-  #root > * { display: none !important; }
-  #root > div { display: block !important; }
-  #root > div > * { visibility: hidden; }
-  #root > div > main { visibility: visible; position: static !important; }
-  #root > div > main > * { visibility: hidden; }
-  #root > div > main > div { visibility: visible; position: static !important; }
-  #root > div > main > div > * { visibility: hidden; }
-  #printable-area, #printable-area * { visibility: visible !important; }
-  #printable-area {
-    position: relative !important;
-    width: 100% !important;
-    margin: 0 !important;
-    padding: 20px 30px !important;
-    box-shadow: none !important;
-    border: none !important;
-    border-radius: 0 !important;
-    background: white !important;
-  }
-  @page { size: A4; margin: 0; }
+  @page { size: A4; margin: 10mm; }
+  html, body { background: white !important; margin: 0; padding: 0; }
+  body > *:not(#root) { display: none !important; }
+  header, nav, button, input, select, textarea, form, .no-print { display: none !important; }
+  #printable-area { max-width: none !important; min-height: auto !important; box-shadow: none !important; border: none !important; padding: 0 !important; }
 }
 
