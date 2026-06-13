@@ -9,7 +9,6 @@ import {
   Plus, Trash2, Printer, Check, Receipt, RefreshCw, 
   User, Mail, MapPin, Building2, CreditCard, Sparkles, AlertCircle 
 } from 'lucide-react';
-import { openPrintWindow } from '../printUtils';
 
 interface ClientFacturationProps {
   currentUser: UserAccount;
@@ -190,13 +189,9 @@ export default function ClientFacturation({
     }, 2800);
   };
 
-  // Trigger browser print of the Invoice preview — clean output, no UI elements
+  // Trigger browser print — CSS @media print shows ONLY #printable-area, identical to live preview
   const handlePrint = () => {
-    const invoiceEl = document.getElementById('printable-area');
-    if (!invoiceEl) return;
-    const invoiceHTML = invoiceEl.outerHTML;
-    openPrintWindow(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Factura ${nFactura}</title>
-<style>body{font-family:system-ui,sans-serif;margin:0;padding:20px;background:white;color:#1e293b}.absolute{display:none!important}.no-print{display:none!important}</style></head><body>${invoiceHTML}</body></html>`);
+    window.print();
   };
 
   return (
