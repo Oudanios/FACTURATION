@@ -4,7 +4,18 @@
   @page { size: A4; margin: 10mm; }
   html, body { background: white !important; margin: 0; padding: 0; }
   body > *:not(#root) { display: none !important; }
+  #root > *:not(#printable-area) { display: none !important; }
   header, nav, button, input, select, textarea, form, .no-print { display: none !important; }
-  #printable-area { max-width: none !important; min-height: auto !important; box-shadow: none !important; border: none !important; padding: 0 !important; }
+  #printable-area { 
+    max-width: none !important; 
+    min-height: auto !important; 
+    box-shadow: none !important; 
+    border: none !important; 
+    border-radius: 0 !important;
+    padding: 0 !important; 
+    position: static !important;
+    overflow: visible !important;
+  }
+  #printable-area .absolute { display: none !important; }
 }
 

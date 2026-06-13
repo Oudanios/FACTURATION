@@ -9,6 +9,7 @@ import {
   Plus, Trash2, Printer, Check, Receipt, RefreshCw, 
   User, Mail, MapPin, Building2, CreditCard, Sparkles, AlertCircle 
 } from 'lucide-react';
+import { openPrintWindow } from '../printUtils';
 
 interface ClientFacturationProps {
   currentUser: UserAccount;
@@ -189,15 +190,19 @@ export default function ClientFacturation({
     }, 2800);
   };
 
-  // Trigger browser print of the Invoice preview specifically
+  // Trigger browser print of the Invoice preview — clean output, no UI elements
   const handlePrint = () => {
-    window.print();
+    const invoiceEl = document.getElementById('printable-area');
+    if (!invoiceEl) return;
+    const invoiceHTML = invoiceEl.outerHTML;
+    openPrintWindow(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Factura ${nFactura}</title>
+<style>body{font-family:system-ui,sans-serif;margin:0;padding:20px;background:white;color:#1e293b}.absolute{display:none!important}.no-print{display:none!important}</style></head><body>${invoiceHTML}</body></html>`);
   };
 
   return (
     <div className="space-y-6 font-sans">
       {/* Introduction banner */}
-      <div className="bg-white p-5 rounded-2xl border border-slate-200 flex justify-between items-start md:items-center">
+      <div className="bg-white p-5 rounded-2xl border border-slate-200 flex justify-between items-start md:items-center no-print">
         <div>
           <h2 className="text-base font-bold text-slate-800 flex items-center gap-2">
             <Receipt className="w-5 h-5 text-indigo-600 animate-pulse" />
@@ -213,7 +218,7 @@ export default function ClientFacturation({
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
         
         {/* LEFT COMPILE PANEL: Input options & lines */}
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6 no-print">
           
           {/* Section 1: Client Metadata */}
           <div className="space-y-4">
@@ -586,7 +591,7 @@ export default function ClientFacturation({
             </div>
 
             {/* Signatures at the very bottom of the A4 page */}
-            <div className="mt-auto pt-12 grid grid-cols-2 text-center text-[8px] text-slate-400 gap-8">
+            <div className="mt-auto pt-12 grid grid-cols-2 text-center text-[8px] text-slate-400 gap-8 no-print">
               <div className="border-t border-slate-300 pt-4">
                 <p className="font-bold text-slate-600 block mb-0.5">Firma Autorizada Hostal</p>
                 <p className="text-[7px]">Sello Hostal Serramar · SUN SERRAMAR SL</p>
